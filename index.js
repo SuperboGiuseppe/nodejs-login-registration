@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cookieSession = require('cookie-session');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const dbConnection = require('./database');
 const { body, validationResult } = require('express-validator');
 
@@ -69,7 +69,7 @@ app.post('/register', ifLoggedin,
     const {user_name, user_pass, user_email} = req.body;
     // IF validation_result HAS NO ERROR
     if(validation_result.isEmpty()){
-        // password encryption (using bcrypt)
+        // password encryption (using bcryptjs)
         bcrypt.hash(user_pass, 12).then((hash_pass) => {
             // INSERTING USER INTO DATABASE
             dbConnection.execute("INSERT INTO `users`(`name`,`email`,`password`) VALUES(?,?,?)",[user_name,user_email, hash_pass])
